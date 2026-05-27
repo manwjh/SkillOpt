@@ -6,7 +6,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from skillopt.config import SkillOptConfig, create_clients, load_config, load_tasks, load_tasks_for_config, split_tasks
+from skillopt.config import SkillOptConfig, config_base_dir, create_clients, load_config, load_tasks, load_tasks_for_config, split_tasks
 from skillopt.core.skill import SkillDocument
 from skillopt.harness.factory import create_harness
 from skillopt.optimizer.loop import OptimizationResult, SkillOptLoop
