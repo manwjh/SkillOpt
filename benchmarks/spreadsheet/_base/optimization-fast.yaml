@@ -1,0 +1,9 @@
+optimization:
+  epochs: 1
+  rollout_batch_size: 2
+  reflection_minibatch_size: 2
+  reflection_refinement_rounds: 1
+  learning_rate: 1
+  schedule: constant
+  enable_slow_update: false
+  enable_meta_skill: false

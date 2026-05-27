@@ -105,10 +105,42 @@ def load_dotenv(path: str | Path | None = None) -> None:
         return
 
 
+def _deep_merge(base: dict, override: dict) -> dict:
+    """Recursively merge override into base (override wins)."""
+    merged = dict(base)
+    for key, value in override.items():
+        if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+            merged[key] = _deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _load_raw_config(path: Path) -> dict:
+    with open(path, encoding="utf-8") as f:
+        raw = yaml.safe_load(f) or {}
+    if not isinstance(raw, dict):
+        raise ValueError(f"Config root must be a mapping: {path}")
+
+    extends = raw.pop("extends", None)
+    if not extends:
+        return raw
+
+    if isinstance(extends, str):
+        extends = [extends]
+
+    merged: dict = {}
+    for ext in extends:
+        ext_path = (path.parent / ext).resolve()
+        if not ext_path.is_file():
+            raise FileNotFoundError(f"Config extends missing file: {ext_path}")
+        merged = _deep_merge(merged, _load_raw_config(ext_path))
+    return _deep_merge(merged, raw)
+
+
 def load_config(path: str | Path) -> SkillOptConfig:
     load_dotenv()
-    with open(path, encoding="utf-8") as f:
-        raw = yaml.safe_load(f)
+    raw = _load_raw_config(Path(path).resolve())
     return SkillOptConfig.model_validate(raw)
 
 

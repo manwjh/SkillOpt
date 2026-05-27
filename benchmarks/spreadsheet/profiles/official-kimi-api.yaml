@@ -1,0 +1,12 @@
+extends:
+  - ../_base/official-dataset.yaml
+  - ../_base/kimi-models.yaml
+  - ../_base/optimization-fast.yaml
+name: spreadsheet-official-kimi
+output_dir: artifacts_official_kimi
+harness: spreadsheet
+workspace_root: artifacts_official_kimi/workspaces
+dataset:
+  limit: 8
+baselines:
+  methods: []

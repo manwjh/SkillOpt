@@ -113,10 +113,26 @@ def test_run_ab_compare(demo_skill, demo_dataset, tmp_path):
 
 
 def test_load_benchmark_config():
-    config_path = Path("benchmarks/spreadsheet/config.yaml")
+    config_path = Path("benchmarks/spreadsheet/profiles/mock-spreadsheet.yaml")
     if config_path.exists():
         cfg = load_config(config_path)
         assert cfg.harness == "spreadsheet"
+        assert cfg.optimization.epochs == 3
+        assert cfg.models.target == "mock"
+
+
+def test_config_extends_merge():
+    root = Path("benchmarks/spreadsheet/profiles")
+    mock = load_config(root / "mock-spreadsheet.yaml")
+    official_kimi_code = load_config(root / "official-kimi-code-smoke.yaml")
+    full = load_config(root / "official-kimi-code-full.yaml")
+
+    assert mock.harness == "spreadsheet"
+    assert official_kimi_code.harness == "kimi_code"
+    assert official_kimi_code.dataset.limit == 4
+    assert full.dataset.limit is None
+    assert full.output_dir == "artifacts_spreadsheetbench_full"
+    assert full.harness_config.cli.extra_args == ["--no-thinking", "--max-steps-per-turn", "40"]
 
 
 def test_create_client_mock():

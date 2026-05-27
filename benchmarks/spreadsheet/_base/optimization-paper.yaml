@@ -1,18 +1,3 @@
-name: spreadsheet-bench
-skill_path: initial_skill.md
-dataset_path: tasks.yaml
-output_dir: artifacts
-harness: spreadsheet
-
-dataset:
-  train_ratio: 0.5
-  selection_ratio: 0.25
-  seed: 42
-
-models:
-  target: mock
-  optimizer: mock
-
 optimization:
   epochs: 3
   rollout_batch_size: 2

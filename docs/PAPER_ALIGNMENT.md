@@ -14,7 +14,7 @@
 | Baselines | no_skill / initial / SkillOpt / TextGrad / GEPA / EvoSkill |
 | Appendix A | 分角色 prompts + `insert_after` + nested JSON |
 | Worker 池化 | `reflection_workers` + `merge_workers` |
-| Kimi K2.6 | 全 benchmark `config.kimi.yaml` |
+| Kimi K2.6 | `profiles/mock-kimi-api.yaml` 等 |
 
 ## 需本机/生产环境验证
 
@@ -31,7 +31,7 @@
 pip install -e ".[all]"
 
 # 四大 benchmark
-cd benchmarks/spreadsheet && skillopt optimize config.yaml && skillopt baselines config.yaml --external
+cd benchmarks/spreadsheet && skillopt optimize profiles/mock-spreadsheet.yaml && skillopt baselines profiles/mock-baselines.yaml --external
 cd benchmarks/office_qa && skillopt optimize config.yaml
 cd benchmarks/alfworld && skillopt optimize config.yaml
 cd examples/demo_qa && skillopt optimize config.kimi.yaml
@@ -39,7 +39,7 @@ cd examples/demo_qa && skillopt optimize config.kimi.yaml
 # 官方 SpreadsheetBench
 ./scripts/download_spreadsheetbench.sh sample
 ./scripts/download_spreadsheetbench.sh full   # 912 任务
-cd benchmarks/spreadsheet && skillopt optimize config.official.yaml
+cd benchmarks/spreadsheet && skillopt optimize profiles/official-mock.yaml
 
 # Claude Code harness（本机需 claude CLI）
 skillopt evaluate skill.md tasks.yaml --harness claude_code --model mock

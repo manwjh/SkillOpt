@@ -32,7 +32,7 @@ jobs:
       - name: Run spreadsheet benchmark smoke
         run: |
           cd benchmarks/spreadsheet
-          skillopt baselines config.yaml
+          skillopt baselines profiles/mock-spreadsheet.yaml
 
       - name: Run alfworld benchmark smoke
         run: |

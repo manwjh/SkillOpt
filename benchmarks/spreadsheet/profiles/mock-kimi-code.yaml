@@ -1,0 +1,19 @@
+extends:
+  - mock-spreadsheet.yaml
+  - ../_base/kimi-models.yaml
+  - ../_base/kimi-code-harness.yaml
+name: spreadsheet-kimi-code-agent
+skill_path: initial_skill_official.md
+output_dir: artifacts_kimi_code
+workspace_root: artifacts_kimi_code/workspaces
+models:
+  target: mock
+  optimizer: kimi
+optimization:
+  epochs: 2
+  reflection_refinement_rounds: 2
+harness_config:
+  cli:
+    extra_args: ["--no-thinking"]
+baselines:
+  methods: []

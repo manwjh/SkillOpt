@@ -1,0 +1,15 @@
+extends:
+  - official-kimi-code-smoke.yaml
+  - ../_base/optimization-paper.yaml
+name: spreadsheetbench-full-kimi-code
+output_dir: artifacts_spreadsheetbench_full
+workspace_root: artifacts_spreadsheetbench_full/workspaces
+dataset:
+  limit: null
+optimization:
+  epochs: 2
+  reflection_refinement_rounds: 2
+  learning_rate: 2
+harness_config:
+  cli:
+    extra_args: ["--no-thinking", "--max-steps-per-turn", "40"]

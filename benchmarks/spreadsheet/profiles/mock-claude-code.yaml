@@ -1,0 +1,7 @@
+extends:
+  - mock-spreadsheet.yaml
+  - ../_base/claude-harness.yaml
+  - ../_base/optimization-fast.yaml
+name: spreadsheet-claude-code
+output_dir: artifacts_claude
+workspace_root: artifacts_claude/workspaces

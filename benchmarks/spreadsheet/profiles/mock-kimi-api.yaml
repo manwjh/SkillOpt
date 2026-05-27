@@ -1,0 +1,11 @@
+extends:
+  - mock-spreadsheet.yaml
+  - ../_base/kimi-models.yaml
+name: spreadsheet-bench-kimi
+optimization:
+  epochs: 2
+baselines:
+  methods: [textgrad, gepa, evoskill]
+  textgrad_steps: 2
+  gepa_generations: 1
+  evoskill_generations: 1

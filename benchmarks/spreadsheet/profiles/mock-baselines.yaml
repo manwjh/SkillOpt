@@ -1,0 +1,4 @@
+extends:
+  - mock-spreadsheet.yaml
+  - ../_base/baselines-external.yaml
+name: spreadsheet-bench-baselines

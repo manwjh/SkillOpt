@@ -1,0 +1,6 @@
+harness: claude_code
+harness_config:
+  cli:
+    require_cli: true
+    timeout: 600
+    permission_mode: bypassPermissions

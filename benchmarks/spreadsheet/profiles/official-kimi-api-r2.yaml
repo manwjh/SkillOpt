@@ -1,0 +1,20 @@
+extends:
+  - ../_base/official-dataset.yaml
+  - ../_base/kimi-models.yaml
+  - ../_base/optimization-paper.yaml
+name: spreadsheet-official-kimi-r2
+skill_path: initial_skill_official.md
+output_dir: artifacts_official_kimi_r2
+harness: spreadsheet
+workspace_root: artifacts_official_kimi_r2/workspaces
+dataset:
+  limit: 12
+optimization:
+  epochs: 3
+  rollout_accumulation_steps: 1
+  reflection_refinement_rounds: 2
+  reflection_workers: 2
+  merge_workers: 2
+  enable_rejected_buffer: true
+baselines:
+  methods: []

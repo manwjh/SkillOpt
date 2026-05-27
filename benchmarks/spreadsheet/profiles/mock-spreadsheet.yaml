@@ -1,0 +1,10 @@
+extends:
+  - ../_base/mock-dataset.yaml
+  - ../_base/optimization-paper.yaml
+name: spreadsheet-bench
+skill_path: initial_skill.md
+output_dir: artifacts
+harness: spreadsheet
+models:
+  target: mock
+  optimizer: mock

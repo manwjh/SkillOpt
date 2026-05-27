@@ -1,0 +1,6 @@
+harness: kimi_code
+harness_config:
+  cli:
+    require_cli: true
+    timeout: 900
+    extra_args: ["--no-thinking", "--max-steps-per-turn", "30"]

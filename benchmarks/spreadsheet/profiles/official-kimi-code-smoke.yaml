@@ -1,0 +1,16 @@
+extends:
+  - ../_base/official-dataset.yaml
+  - ../_base/kimi-models.yaml
+  - ../_base/kimi-code-harness.yaml
+  - ../_base/optimization-fast.yaml
+name: spreadsheet-official-kimi-code
+skill_path: initial_skill_official.md
+output_dir: artifacts_official_kimi_code
+workspace_root: artifacts_official_kimi_code/workspaces
+dataset:
+  limit: 4
+models:
+  target: mock
+  optimizer: kimi
+baselines:
+  methods: []

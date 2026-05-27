@@ -1,0 +1,6 @@
+baselines:
+  methods: [textgrad, gepa, evoskill]
+  textgrad_steps: 2
+  gepa_generations: 1
+  gepa_population: 3
+  evoskill_generations: 1

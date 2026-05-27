@@ -240,8 +240,16 @@ def benchmarks() -> None:
     table.add_column("ID", style="cyan")
     table.add_column("Config", style="green")
     for preset in sorted(benchmarks_dir.iterdir()):
-        if preset.is_dir() and (preset / "config.yaml").exists():
-            table.add_row(preset.name, str(preset / "config.yaml"))
+        if not preset.is_dir():
+            continue
+        profiles_dir = preset / "profiles"
+        if profiles_dir.is_dir():
+            for profile in sorted(profiles_dir.glob("*.yaml")):
+                table.add_row(f"{preset.name}/{profile.stem}", str(profile))
+            continue
+        config = preset / "config.yaml"
+        if config.is_file():
+            table.add_row(preset.name, str(config))
     console.print(table)
 
 

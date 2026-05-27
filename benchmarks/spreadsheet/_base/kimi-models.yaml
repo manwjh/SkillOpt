@@ -1,0 +1,7 @@
+models:
+  target: kimi
+  optimizer: kimi
+  kimi_model: kimi-k2.6
+  kimi_base_url: https://api.kimi.com/coding/v1
+  kimi_disable_thinking: true
+  kimi_coding_agent: true

@@ -219,10 +219,24 @@ def list_benchmarks() -> list[dict]:
         return []
     result = []
     for preset_dir in sorted(benchmarks_dir.iterdir()):
-        if preset_dir.is_dir() and (preset_dir / "config.yaml").exists():
+        if not preset_dir.is_dir():
+            continue
+        profiles_dir = preset_dir / "profiles"
+        if profiles_dir.is_dir():
+            for profile in sorted(profiles_dir.glob("*.yaml")):
+                result.append({
+                    "id": f"{preset_dir.name}/{profile.stem}",
+                    "config": str(profile),
+                    "description": (preset_dir / "README.md").read_text(encoding="utf-8")[:200]
+                    if (preset_dir / "README.md").exists()
+                    else "",
+                })
+            continue
+        config = preset_dir / "config.yaml"
+        if config.is_file():
             result.append({
                 "id": preset_dir.name,
-                "config": str(preset_dir / "config.yaml"),
+                "config": str(config),
                 "description": (preset_dir / "README.md").read_text(encoding="utf-8")[:200]
                 if (preset_dir / "README.md").exists()
                 else "",

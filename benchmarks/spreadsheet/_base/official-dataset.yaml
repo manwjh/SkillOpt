@@ -1,0 +1,7 @@
+dataset:
+  format: spreadsheetbench
+  data_root: ../../data/spreadsheetbench/sample_data_200
+  manifest: dataset.json
+  train_ratio: 0.5
+  selection_ratio: 0.25
+  seed: 42

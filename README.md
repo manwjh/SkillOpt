@@ -48,7 +48,7 @@ skillopt library review skill-id --status published
 
 ```bash
 skillopt benchmarks
-skillopt optimize benchmarks/spreadsheet/config.yaml
+skillopt optimize benchmarks/spreadsheet/profiles/mock-spreadsheet.yaml
 skillopt optimize benchmarks/office_qa/config.yaml
 ```
 
@@ -83,21 +83,27 @@ optimization:
 
 ## Project Structure
 
+**Core (~2k LOC)** — the optimizer engine; everything else is adapters and presets.
+
 ```
 src/skillopt/
+├── optimizer/      Loop, Reflection, Scheduler, SlowUpdate   ← core
 ├── core/           Skill, Edit, State, Trajectory
-├── optimizer/      Loop, Reflection, Scheduler, SlowUpdate
-├── scoring/        Benchmark scorers
 ├── gate/           Validation gate
-├── harness/        Direct Chat, Codex, Claude Code
-├── llm/            OpenAI, Anthropic, Azure, Kimi, Mock
+├── harness/        Task runners (spreadsheet, workspace CLI, …)
+├── llm/            Provider clients (Mock, OpenAI, Kimi, …)
+├── benchmarks/     Dataset adapters (SpreadsheetBench, baselines)
 ├── library/        Skill catalog & review
-├── api/            FastAPI server
-├── web/static/     Web Console
-├── cost/           Token tracking
-└── cli.py          CLI entry point
+├── api/ + web/     Optional Web Console
+└── cli.py
 
-benchmarks/         SpreadsheetBench, OfficeQA presets
+benchmarks/         YAML presets only — not part of the engine
+  spreadsheet/
+    _base/          Reusable config fragments (dataset, models, optimization)
+    profiles/       Runnable presets (mock, official, kimi-code, …)
+```
+
+```
 examples/demo_qa/   Runnable demo (+ config.paper.yaml, config.kimi.yaml)
 .github/workflows/  CI pipeline
 docs/PAPER_ALIGNMENT.md  Paper vs implementation tracker
@@ -112,14 +118,14 @@ skillopt optimize examples/demo_qa/config.paper.yaml
 
 # Runtime benchmarks (openpyxl spreadsheet + OfficeQA oracle)
 pip install -e ".[all]"
-cd benchmarks/spreadsheet && skillopt optimize config.yaml && skillopt baselines config.yaml
+cd benchmarks/spreadsheet && skillopt optimize profiles/mock-spreadsheet.yaml && skillopt baselines profiles/mock-spreadsheet.yaml
 
 # External baselines (TextGrad / GEPA / EvoSkill)
-skillopt run-external-baselines config.baselines.yaml
-skillopt baselines config.baselines.yaml --external
+skillopt run-external-baselines profiles/mock-baselines.yaml
+skillopt baselines profiles/mock-baselines.yaml --external
 
 # Official SpreadsheetBench (after ./scripts/download_spreadsheetbench.sh)
-skillopt optimize config.official.yaml
+skillopt optimize profiles/official-mock.yaml
 skillopt import-spreadsheetbench data/spreadsheetbench -o tasks_official.yaml
 
 cd benchmarks/office_qa && skillopt optimize config.yaml && skillopt baselines config.yaml
@@ -151,10 +157,10 @@ kimi login
 
 # Mock spreadsheet：Agent 改 task.xlsx，Kimi API 做 optimizer
 cd benchmarks/spreadsheet
-skillopt optimize config.kimi_code.yaml
+skillopt optimize profiles/mock-kimi-code.yaml
 
 # 官方 SpreadsheetBench（Agent target + Kimi optimizer）
-skillopt optimize config.official.kimi_code.yaml
+skillopt optimize profiles/official-kimi-code-smoke.yaml
 ```
 
 架构：`harness: kimi_code` → `kimi --print --yolo -w <workspace> -p "..."`；`optimizer: kimi` → 仍走 API 优化 skill。
