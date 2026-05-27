@@ -14,7 +14,7 @@ from skillopt.optimizer.loop import OptimizationResult, SkillOptLoop
 
 def run_optimization(config_path: Path) -> OptimizationResult:
     config = load_config(config_path)
-    base_dir = config_path.parent.resolve()
+    base_dir = config_base_dir(config_path)
     config.optimization.output_dir = str(base_dir / config.output_dir)
 
     skill = SkillDocument.from_file(base_dir / config.skill_path)

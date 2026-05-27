@@ -6,7 +6,7 @@ import json
 import random
 from pathlib import Path
 
-from skillopt.config import SkillOptConfig, create_clients, load_config, load_tasks_for_config, split_tasks
+from skillopt.config import SkillOptConfig, config_base_dir, create_clients, load_config, load_tasks_for_config, split_tasks
 from skillopt.core.edit import Edit, EditAction, EditEngine
 from skillopt.core.skill import SkillDocument
 from skillopt.harness.factory import create_harness
@@ -162,7 +162,7 @@ def run_evoskill(
 
 def run_external_baselines(config_path: Path) -> dict:
     config = load_config(config_path)
-    base_dir = config_path.parent.resolve()
+    base_dir = config_base_dir(config_path)
     skill_path = base_dir / config.skill_path
 
     tasks = load_tasks_for_config(config, base_dir)

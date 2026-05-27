@@ -138,6 +138,14 @@ def _load_raw_config(path: Path) -> dict:
     return _deep_merge(merged, raw)
 
 
+def config_base_dir(config_path: str | Path) -> Path:
+    """Resolve preset root for relative paths in skill/dataset/output fields."""
+    path = Path(config_path).resolve()
+    if path.parent.name == "profiles":
+        return path.parent.parent
+    return path.parent
+
+
 def load_config(path: str | Path) -> SkillOptConfig:
     load_dotenv()
     raw = _load_raw_config(Path(path).resolve())

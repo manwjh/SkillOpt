@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from skillopt.config import SkillOptConfig, create_clients, load_config, load_tasks_for_config, split_tasks
+from skillopt.config import SkillOptConfig, config_base_dir, create_clients, load_config, load_tasks_for_config, split_tasks
 from skillopt.core.skill import SkillDocument
 from skillopt.harness.factory import create_harness
 
 
 def run_baselines(config_path: Path, *, include_external: bool = False) -> dict:
     config = load_config(config_path)
-    base_dir = config_path.parent.resolve()
+    base_dir = config_base_dir(config_path)
 
     skill_path = base_dir / config.skill_path
     best_path = base_dir / config.output_dir / "best_skill.md"

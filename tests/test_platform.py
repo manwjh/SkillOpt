@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from skillopt.config import SkillOptConfig, create_client, load_config
+from skillopt.config import SkillOptConfig, config_base_dir, create_client, load_config
 from skillopt.core.skill import SkillDocument
 from skillopt.cost.tracker import CostTracker
 from skillopt.harness.direct_chat import DirectChatHarness
@@ -133,6 +133,12 @@ def test_config_extends_merge():
     assert full.dataset.limit is None
     assert full.output_dir == "artifacts_spreadsheetbench_full"
     assert full.harness_config.cli.extra_args == ["--no-thinking", "--max-steps-per-turn", "40"]
+
+
+def test_config_base_dir_profiles():
+    profile = Path("benchmarks/spreadsheet/profiles/mock-spreadsheet.yaml")
+    if profile.exists():
+        assert config_base_dir(profile) == Path("benchmarks/spreadsheet").resolve()
 
 
 def test_create_client_mock():

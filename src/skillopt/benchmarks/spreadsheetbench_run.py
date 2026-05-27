@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from skillopt.config import SkillOptConfig, create_clients, load_config, load_tasks_for_config, split_tasks
+from skillopt.config import SkillOptConfig, config_base_dir, create_clients, load_config, load_tasks_for_config, split_tasks
 from skillopt.core.skill import SkillDocument
 from skillopt.harness.factory import create_harness
 
@@ -21,7 +21,7 @@ def run_spreadsheetbench_eval(
 ) -> dict:
     """Evaluate skill on SpreadsheetBench tasks; write incremental JSON report."""
     config = load_config(config_path)
-    base_dir = config_path.parent.resolve()
+    base_dir = config_base_dir(config_path)
     config.workspace_root = str(base_dir / config.workspace_root) if config.workspace_root else None
 
     tasks = load_tasks_for_config(config, base_dir)
