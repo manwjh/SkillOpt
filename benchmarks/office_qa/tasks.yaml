@@ -1,0 +1,60 @@
+tasks:
+  - id: oq-revenue
+    input: "What is the Q3 revenue? Reply with the number only, no currency symbol or commas."
+    expected: "1250000"
+    metadata:
+      format: number
+      document: |
+        ACME Corp Q3 Financial Summary (Page 5)
+        Q3 Revenue: $1,250,000
+        Q3 Expenses: $980,000
+
+  - id: oq-headcount
+    input: "What is the employee headcount rounded to the nearest integer? Number only."
+    expected: "847"
+    metadata:
+      format: number
+      document: |
+        HR Report 2025
+        Total employees (FTE): 847.3
+        Contractors: 52
+
+  - id: oq-date
+    input: "What is the contract end date in YYYY-MM-DD format?"
+    expected: "2026-12-31"
+    metadata:
+      format: date
+      document: |
+        Master Service Agreement
+        Contract End Date: December 31, 2026
+        Renewal clause: automatic unless terminated 90 days prior.
+
+  - id: oq-margin
+    input: "What is the profit margin percentage without the percent sign? Number only."
+    expected: "23.5"
+    metadata:
+      format: number
+      document: |
+        Profit & Loss Statement
+        Revenue: $10M
+        Profit: $2.35M
+        Profit Margin: 23.5%
+
+  - id: oq-region
+    input: "Which region had the highest sales? Reply with the region name only."
+    expected: "APAC"
+    metadata:
+      document: |
+        Regional Sales Q4
+        NA: $4.2M | EU: $3.8M | APAC: $5.1M | LATAM: $2.0M
+
+  - id: oq-sku
+    input: "How many units of SKU-42 were sold? Integer only."
+    expected: "1520"
+    metadata:
+      format: number
+      document: |
+        Inventory Movement Log
+        SKU-41: 890 units
+        SKU-42: 1,520 units
+        SKU-43: 430 units

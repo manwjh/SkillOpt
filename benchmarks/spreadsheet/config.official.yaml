@@ -1,0 +1,29 @@
+name: spreadsheet-bench-official
+skill_path: initial_skill.md
+output_dir: artifacts
+harness: spreadsheet
+workspace_root: artifacts/workspaces
+
+# Download data first — see scripts/download_spreadsheetbench.sh
+dataset:
+  format: spreadsheetbench
+  data_root: ../../data/spreadsheetbench/sample_data_200
+  manifest: dataset.json
+  limit: 10
+  train_ratio: 0.5
+  selection_ratio: 0.25
+  seed: 42
+
+models:
+  target: mock
+  optimizer: mock
+
+optimization:
+  epochs: 2
+  rollout_batch_size: 4
+  reflection_minibatch_size: 4
+  learning_rate: 2
+  schedule: cosine
+
+baselines:
+  methods: [textgrad, gepa, evoskill]

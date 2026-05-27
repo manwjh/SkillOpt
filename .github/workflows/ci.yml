@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,spreadsheet]"
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+      - name: Run spreadsheet benchmark smoke
+        run: |
+          cd benchmarks/spreadsheet
+          skillopt baselines config.yaml
+
+      - name: Run alfworld benchmark smoke
+        run: |
+          cd benchmarks/alfworld
+          skillopt optimize config.yaml
+          skillopt baselines config.yaml
+
+      - name: Run demo optimization
+        run: |
+          cd examples/demo_qa
+          skillopt optimize config.yaml
+
+      - name: Skill regression test
+        run: |
+          skillopt regression \
+            examples/demo_qa/artifacts/best_skill.md \
+            examples/demo_qa/tasks.yaml \
+            --min-score 0.8
+
+      - name: A/B compare (optimized vs initial)
+        run: |
+          skillopt compare \
+            examples/demo_qa/initial_skill.md \
+            examples/demo_qa/artifacts/best_skill.md \
+            examples/demo_qa/tasks.yaml
+
+      - name: Transfer test
+        run: |
+          skillopt transfer \
+            examples/demo_qa/artifacts/best_skill.md \
+            examples/demo_qa/tasks.yaml
+
+      - name: Add to skill library
+        run: |
+          skillopt library add \
+            examples/demo_qa/artifacts/best_skill.md \
+            "Demo QA Skill" qa \
+            --benchmark demo_qa \
+            --score 1.0
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: skillopt-artifacts-py${{ matrix.python-version }}
+          path: |
+            examples/demo_qa/artifacts/
+            skill_library/

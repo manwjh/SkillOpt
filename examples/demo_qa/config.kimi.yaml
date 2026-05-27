@@ -1,0 +1,30 @@
+name: demo-qa-kimi-k2.6
+skill_path: initial_skill.md
+dataset_path: tasks.yaml
+output_dir: artifacts
+harness: direct_chat
+
+dataset:
+  train_ratio: 0.5
+  selection_ratio: 0.2
+  seed: 42
+
+models:
+  target: kimi
+  optimizer: kimi
+  kimi_model: kimi-k2.6
+  kimi_base_url: https://api.kimi.com/coding/v1
+  kimi_disable_thinking: true
+  kimi_coding_agent: true
+
+optimization:
+  epochs: 2
+  rollout_batch_size: 4
+  reflection_minibatch_size: 2
+  reflection_workers: 2
+  learning_rate: 2
+  learning_rate_min: 1
+  schedule: cosine
+  enable_rejected_buffer: true
+  enable_slow_update: true
+  enable_meta_skill: true

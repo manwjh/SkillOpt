@@ -1,0 +1,49 @@
+tasks:
+- id: 59196-tc1
+  input: I need a formula to determine which column contains the highest value in
+    a row, and then return the heading of that column. My Excel sheet example is attached.
+  metadata:
+    format: spreadsheetbench
+    instruction_type: Cell-Level Manipulation
+    source_id: '59196'
+    test_case_prefix: '1_59196'
+    workbook_template: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/59196/1_59196_input.xlsx
+    answer_workbook: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/59196/1_59196_answer.xlsx
+    answer_position: []
+    spreadsheet_dir: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/59196
+- id: 99-24-tc1
+  input: How can I filter a large dataset in Excel to display records within the 2019
+    to 2023 date range where the 'Date Paid' field is not empty in the 'Paid' worksheet,
+    and records where the 'Date Paid' field is null or empty in the 'NotPaid' worksheet,
+    preferably using a function? There's an example provided in the attached file
+    called 'Vendor.xlsm'.
+  metadata:
+    format: spreadsheetbench
+    instruction_type: Sheet-Level Manipulation
+    source_id: 99-24
+    test_case_prefix: 1_99-24
+    workbook_template: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/99-24/1_99-24_input.xlsx
+    answer_workbook: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/99-24/1_99-24_answer.xlsx
+    answer_position: []
+    spreadsheet_dir: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/99-24
+- id: CF_6540-tc1
+  input: 'I have created a spreadsheet for a comparison of rates between different
+    supplier. I have applied conditional formatting to highlight cells with the lowest
+    rate in green between each of them. The example is on cell CC7 which shows the
+    lowest rate amongst all the different company rates for bank holiday for a site
+    manager.
+
+    I want to duplicate this for each row, for all four types of rate i.e. Midweek
+    Days, Midweek Nights, Weekend, Bank Holiday.
+
+
+    Is there a quick way I can replicate this formatting?'
+  metadata:
+    format: spreadsheetbench
+    instruction_type: Sheet-Level Manipulation
+    source_id: CF_6540
+    test_case_prefix: 1_CF_6540
+    workbook_template: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/CF_6540/1_CF_6540_input.xlsx
+    answer_workbook: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/CF_6540/1_CF_6540_answer.xlsx
+    answer_position: []
+    spreadsheet_dir: /Users/wangjunhui/playcode/SkillOpt/data/spreadsheetbench/sample_data_200/spreadsheet/CF_6540

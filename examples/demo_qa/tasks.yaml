@@ -1,0 +1,40 @@
+tasks:
+  - id: geo-1
+    input: "What is the capital of France?"
+    expected: "Paris"
+
+  - id: geo-2
+    input: "What is the capital of Japan?"
+    expected: "Tokyo"
+
+  - id: geo-3
+    input: "What is the capital of Germany?"
+    expected: "Berlin"
+
+  - id: math-1
+    input: "What is 2 + 2?"
+    expected: "4"
+
+  - id: math-2
+    input: "What is 7 * 8?"
+    expected: "56"
+
+  - id: math-3
+    input: "What is 100 - 37?"
+    expected: "63"
+
+  - id: geo-4
+    input: "What is the capital of Italy?"
+    expected: "Rome"
+
+  - id: math-4
+    input: "What is 15 + 27?"
+    expected: "42"
+
+  - id: geo-5
+    input: "What is the capital of Spain?"
+    expected: "Madrid"
+
+  - id: math-5
+    input: "What is 9 * 9?"
+    expected: "81"

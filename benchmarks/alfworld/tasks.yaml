@@ -1,0 +1,87 @@
+tasks:
+  - id: alf-heat-apple
+    input: Heat the apple and put it on the countertop.
+    metadata:
+      rooms: [kitchen, living room, bedroom]
+      initial_state:
+        location: living room
+        inventory: []
+        objects:
+          apple: kitchen
+          microwave: kitchen
+          countertop: kitchen
+      goal:
+        objects:
+          apple: countertop
+        flags:
+          apple_heated: true
+
+  - id: alf-clean-mug
+    input: Clean the mug and put it on the table in the kitchen.
+    metadata:
+      rooms: [kitchen, living room]
+      initial_state:
+        location: living room
+        objects:
+          mug: kitchen
+          table: kitchen
+      goal:
+        objects:
+          mug: table
+        flags:
+          mug_clean: true
+
+  - id: alf-lamp
+    input: Move the lamp from the bedroom to the table in the living room.
+    metadata:
+      rooms: [bedroom, living room, kitchen]
+      initial_state:
+        location: living room
+        objects:
+          lamp: bedroom
+          table: living room
+      goal:
+        objects:
+          lamp: table
+
+  - id: alf-book
+    input: Bring the book from the bedroom to the shelf in the living room.
+    metadata:
+      rooms: [bedroom, living room]
+      initial_state:
+        location: living room
+        objects:
+          book: bedroom
+          shelf: living room
+      goal:
+        objects:
+          book: shelf
+
+  - id: alf-egg
+    input: Heat the egg and place it on the plate in the kitchen.
+    metadata:
+      rooms: [kitchen, living room]
+      initial_state:
+        location: living room
+        objects:
+          egg: kitchen
+          microwave: kitchen
+          plate: kitchen
+      goal:
+        objects:
+          egg: plate
+        flags:
+          egg_heated: true
+
+  - id: alf-remote
+    input: Put the remote on the table in the living room.
+    metadata:
+      rooms: [living room, bedroom]
+      initial_state:
+        location: bedroom
+        objects:
+          remote: living room
+          table: living room
+      goal:
+        objects:
+          remote: table

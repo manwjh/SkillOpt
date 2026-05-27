@@ -1,0 +1,78 @@
+tasks:
+  - id: ss-sum
+    input: |
+      Sum values in column B (cells B2:B4) and write the total as a static numeric value in cell B5.
+      Do not use formulas — write the computed number only.
+    metadata:
+      sheet_data:
+        - ["Item", "Qty"]
+        - ["Apple", 10]
+        - ["Banana", 20]
+        - ["Cherry", 15]
+        - ["Total", ""]
+      expected_cells:
+        B5: 45
+
+  - id: ss-vlookup
+    input: |
+      Lookup name "Bob" in column A and write the corresponding value from column B into cell D2 as a static value.
+    metadata:
+      sheet_data:
+        - ["Name", "Score", "", "Result"]
+        - ["Alice", 90, "", ""]
+        - ["Bob", 85, "", ""]
+        - ["Carol", 88, "", ""]
+      expected_cells:
+        D2: 85
+
+  - id: ss-static-col
+    input: |
+      Fill column C (C2:C4) with static computed values: each cell should be column B value times 2.
+      Write numbers only, no formulas.
+    metadata:
+      sheet_data:
+        - ["ID", "Base", "Double"]
+        - [1, 5, ""]
+        - [2, 10, ""]
+        - [3, 15, ""]
+      expected_cells:
+        C2: 10
+        C3: 20
+        C4: 30
+
+  - id: ss-max
+    input: |
+      Find the maximum value in B2:B4 and write it as a static value in cell B6.
+    metadata:
+      sheet_data:
+        - ["Item", "Value"]
+        - ["A", 12]
+        - ["B", 27]
+        - ["C", 19]
+        - ["Max", ""]
+      expected_cells:
+        B6: 27
+
+  - id: ss-count
+    input: |
+      Count non-empty numeric values in B2:B5 and write the count as a static integer in B7.
+    metadata:
+      sheet_data:
+        - ["Row", "Val"]
+        - [1, 3]
+        - [2, 7]
+        - [3, ""]
+        - [4, 11]
+        - ["Count", ""]
+      expected_cells:
+        B7: 3
+
+  - id: ss-label
+    input: |
+      Copy the label from A2 and append "_DONE" in cell C2 as static text.
+    metadata:
+      sheet_data:
+        - ["Label", "Status", "Output"]
+        - ["Report", "pending", ""]
+      expected_cells:
+        C2: "Report_DONE"

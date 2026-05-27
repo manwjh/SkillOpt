@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillOpt Console</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --border: #2d3a4f;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header span { color: var(--muted); font-size: 0.875rem; }
+    main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    .card h2 { font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+    label { display: block; font-size: 0.8125rem; color: var(--muted); margin-bottom: 0.25rem; }
+    input, select {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    button:hover { opacity: 0.9; }
+    button.secondary { background: var(--border); }
+    .metrics { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+    .metric {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      min-width: 120px;
+    }
+    .metric .value { font-size: 1.5rem; font-weight: 600; }
+    .metric .label { font-size: 0.75rem; color: var(--muted); }
+    .log-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; margin-top: 1rem; }
+    .log-table th, .log-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+    .log-table th { color: var(--muted); font-weight: 500; }
+    .badge { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.75rem; }
+    .badge.ok { background: rgba(63,185,80,0.15); color: var(--green); }
+    .badge.fail { background: rgba(248,81,73,0.15); color: var(--red); }
+    .badge.run { background: rgba(88,166,255,0.15); color: var(--accent); }
+    pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.8125rem;
+      max-height: 300px;
+      margin-top: 0.75rem;
+    }
+    .full-width { grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SkillOpt Console</h1>
+    <span>Agent Skill Text-Space Optimizer</span>
+  </header>
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>启动优化</h2>
+        <label>Config 路径</label>
+        <input id="configPath" value="examples/demo_qa/config.yaml" />
+        <button onclick="startOptimize()">开始优化</button>
+      </div>
+      <div class="card">
+        <h2>Skill 评估</h2>
+        <label>Skill 路径</label>
+        <input id="evalSkill" value="examples/demo_qa/artifacts/best_skill.md" />
+        <label>Dataset 路径</label>
+        <input id="evalDataset" value="examples/demo_qa/tasks.yaml" />
+        <button onclick="runEvaluate()">评估</button>
+      </div>
+      <div class="card">
+        <h2>迁移测试</h2>
+        <label>Skill 路径</label>
+        <input id="transferSkill" value="examples/demo_qa/artifacts/best_skill.md" />
+        <label>目标 Dataset</label>
+        <input id="transferDataset" value="examples/demo_qa/tasks.yaml" />
+        <button onclick="runTransfer()">测试迁移</button>
+      </div>
+      <div class="card">
+        <h2>A/B 对比</h2>
+        <label>Skill A</label>
+        <input id="skillA" value="examples/demo_qa/initial_skill.md" />
+        <label>Skill B</label>
+        <input id="skillB" value="examples/demo_qa/artifacts/best_skill.md" />
+        <label>Dataset</label>
+        <input id="compareDataset" value="examples/demo_qa/tasks.yaml" />
+        <button onclick="runCompare()">对比</button>
+      </div>
+      <div class="card full-width">
+        <h2>优化进度</h2>
+        <div class="metrics" id="metrics">
+          <div class="metric"><div class="value" id="mStatus">—</div><div class="label">状态</div></div>
+          <div class="metric"><div class="value" id="mScore">—</div><div class="label">Best Score</div></div>
+          <div class="metric"><div class="value" id="mEdits">—</div><div class="label">Accepted Edits</div></div>
+          <div class="metric"><div class="value" id="mCost">—</div><div class="label">Total Tokens</div></div>
+        </div>
+        <table class="log-table" id="logTable">
+          <thead><tr><th>Step</th><th>Epoch</th><th>Edits</th><th>Gate</th><th>Score</th><th>Best</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card full-width">
+        <h2>Skill Library</h2>
+        <button onclick="loadLibrary()" class="secondary">刷新</button>
+        <pre id="libraryOut">点击刷新加载...</pre>
+      </div>
+      <div class="card full-width">
+        <h2>Best Skill</h2>
+        <pre id="skillOut">运行优化后显示...</pre>
+      </div>
+    </div>
+  </main>
+  <script>
+    let currentJob = null;
+    let pollTimer = null;
+
+    async function api(path, opts = {}) {
+      const res = await fetch(`/api${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...opts,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    async function startOptimize() {
+      const config_path = document.getElementById("configPath").value;
+      const { job_id } = await api("/optimize", {
+        method: "POST",
+        body: JSON.stringify({ config_path }),
+      });
+      currentJob = job_id;
+      document.getElementById("mStatus").textContent = "queued";
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(pollJob, 1500);
+      pollJob();
+    }
+
+    async function pollJob() {
+      if (!currentJob) return;
+      const job = await api(`/jobs/${currentJob}`);
+      document.getElementById("mStatus").textContent = job.status;
+      if (job.summary) {
+        document.getElementById("mScore").textContent = (job.summary.best_selection_score * 100).toFixed(0) + "%";
+        document.getElementById("mEdits").textContent = job.summary.accepted_edits;
+        document.getElementById("mCost").textContent = job.summary.cost?.total_tokens ?? "—";
+      }
+      if (job.log) {
+        const tbody = document.querySelector("#logTable tbody");
+        tbody.innerHTML = job.log.map(r => `
+          <tr>
+            <td>${r.step}</td><td>${r.epoch}</td><td>${r.applied}/${r.proposed}</td>
+            <td><span class="badge ${r.accepted ? 'ok' : 'fail'}">${r.accepted ? 'accept' : 'reject'}</span></td>
+            <td>${(r.score * 100).toFixed(0)}%</td><td>${(r.best * 100).toFixed(0)}%</td>
+          </tr>`).join("");
+      }
+      if (job.status === "completed" || job.status === "failed") {
+        clearInterval(pollTimer);
+        if (job.artifacts_dir) {
+          try {
+            const resp = await fetch(job.result.best_skill_path.replace(/^.*\//, "/") );
+          } catch(e) {}
+        }
+        if (job.result?.best_skill_path) {
+          try {
+            const text = await fetch("file://" + job.result.best_skill_path).then(r=>r.text()).catch(()=>null);
+          } catch(e) {}
+        }
+        loadSkillFromArtifacts(job);
+      }
+    }
+
+    async function loadSkillFromArtifacts(job) {
+      if (!job.summary) return;
+      document.getElementById("skillOut").textContent =
+        `Optimization complete.\nBest score: ${(job.summary.best_selection_score*100).toFixed(1)}%\n` +
+        `Test score: ${(job.summary.test_score*100).toFixed(1)}%\n` +
+        `Path: ${job.result?.best_skill_path || 'artifacts/best_skill.md'}`;
+    }
+
+    async function runEvaluate() {
+      const data = await api("/evaluate", {
+        method: "POST",
+        body: JSON.stringify({
+          skill_path: document.getElementById("evalSkill").value,
+          dataset_path: document.getElementById("evalDataset").value,
+        }),
+      });
+      alert(`Score: ${(data.score * 100).toFixed(1)}% (${data.tasks} tasks)`);
+    }
+
+    async function runTransfer() {
+      const data = await api("/transfer", {
+        method: "POST",
+        body: JSON.stringify({
+          skill_path: document.getElementById("transferSkill").value,
+          dataset_path: document.getElementById("transferDataset").value,
+        }),
+      });
+      alert(`Baseline: ${(data.baseline_score*100).toFixed(1)}%\nTransferred: ${(data.transferred_score*100).toFixed(1)}%\nLift: +${(data.lift*100).toFixed(1)}%`);
+    }
+
+    async function runCompare() {
+      const data = await api("/compare", {
+        method: "POST",
+        body: JSON.stringify({
+          skill_a_path: document.getElementById("skillA").value,
+          skill_b_path: document.getElementById("skillB").value,
+          dataset_path: document.getElementById("compareDataset").value,
+        }),
+      });
+      alert(`A: ${(data.skill_a.score*100).toFixed(1)}%\nB: ${(data.skill_b.score*100).toFixed(1)}%\nWinner: ${data.winner}`);
+    }
+
+    async function loadLibrary() {
+      const items = await api("/library");
+      document.getElementById("libraryOut").textContent = JSON.stringify(items, null, 2);
+    }
+  </script>
+</body>
+</html>
